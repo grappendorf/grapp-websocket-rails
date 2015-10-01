@@ -1,0 +1,47 @@
+<dom-module id="grapp-websocket-rails-bind">
+  <script>
+    Polymer({
+      is: 'grapp-websocket-rails-bind',
+      properties: {
+        event: {type: String}
+      }
+    });
+  </script>
+</dom-module>
+
+<dom-module id="grapp-websocket-rails-subscribe">
+
+<script type="text/javascript">(function() {
+  Polymer({
+    is: 'grapp-websocket-rails-subscribe',
+    properties: {
+      channel: {
+        type: String
+      },
+      websocket: {
+        type: Object,
+        observer: '_websocketChanged'
+      }
+    },
+    _websocketChanged: function() {
+      var bind, bindEvent, channel, i, len, ref, results;
+      channel = this.websocket.subscribe(this.channel);
+      bindEvent = function(channel, event, elem) {
+        return channel.bind(event, function(data) {
+          return elem.fire('data', data);
+        });
+      };
+      ref = Polymer.dom(this).querySelectorAll('grapp-websocket-rails-bind');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        bind = ref[i];
+        results.push(bindEvent(channel, bind.event, bind));
+      }
+      return results;
+    }
+  });
+
+}).call(this);
+</script>
+
+</dom-module>

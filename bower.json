@@ -1,0 +1,41 @@
+{
+  "name": "grapp-websocket-rails",
+  "description": "A web component that displays font awesome icons",
+  "version": "0.1.2",
+  "main": "grapp-websocket-rails.html",
+  "license": "MIT",
+  "ignore": [
+    "bin",
+    "build",
+    "lib",
+    "node_modules",
+    "src",
+    "test",
+    "tmpl",
+    "package.json",
+    "**/.*",
+    "**/*.log",
+    "**/*.sublime-*"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "grappendorf"
+  ],
+  "authors": [
+    "Dirk Grappendorf <dirk@grappendorf.net> (http://www.grappendorf.net)"
+  ],
+  "homepage": "https://github.com/grappendorf/grapp-websocket-rails",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/grappendorf/grapp-websocket-rails.git"
+  },
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "web-component-tester": "Polymer/web-component-tester#3.3.21",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
+  }
+}

@@ -4,32 +4,54 @@
 
 
 <script type="text/javascript">(function() {
+  var RECONNECT_DELAY_MILLIS;
+
+  RECONNECT_DELAY_MILLIS = 10 * 1000;
+
   Polymer({
-    is: 'grapp-websocket-rails-subscribe',
+    is: 'grapp-websocket-rails',
     properties: {
-      channel: {
-        type: String
+      url: {
+        type: String,
+        observer: '_urlChanged'
       },
       websocket: {
         type: Object,
-        observer: '_websocketChanged'
+        value: (function() {
+          return this;
+        }),
+        notify: true
+      },
+      dispatcher: {
+        type: Object,
+        notify: true
       }
     },
-    _websocketChanged: function() {
-      var bind, bindEvent, channel, i, len, ref, results;
-      channel = this.websocket.subscribe(this.channel);
-      bindEvent = function(channel, event, elem) {
-        return channel.bind(event, function(data) {
-          return elem.fire('data', data);
-        });
-      };
-      ref = Polymer.dom(this).querySelectorAll('grapp-websocket-rails-bind');
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        bind = ref[i];
-        results.push(bindEvent(channel, bind.event, bind));
-      }
-      return results;
+    subscribe: function(channel) {
+      return this.dispatcher.subscribe(channel);
+    },
+    trigger: function(event, data) {
+      return this.dispatcher.trigger(event, data);
+    },
+    reconnect: function() {
+      this.dispatcher.reconnect();
+      return this._installConnectionHandlers();
+    },
+    _urlChanged: function() {
+      return this._createConnection();
+    },
+    _createConnection: function() {
+      this.dispatcher = new WebSocketRails(this.url);
+      return this._installConnectionHandlers();
+    },
+    _installConnectionHandlers: function() {
+      return this.dispatcher._conn.on_close = (function(_this) {
+        return function(e) {
+          return _this.async(function() {
+            return _this.reconnect();
+          }, null, RECONNECT_DELAY_MILLIS);
+        };
+      })(this);
     }
   });
 

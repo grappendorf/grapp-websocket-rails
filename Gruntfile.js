@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 
     copy: {
       options: {
-        processContent: function (content, srcpath) {
+        processContent: function(content, srcpath) {
           return grunt.template.process(content);
         }
       },
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     coffeelint: {
       src: ['src/*.coffee'],
       options: {
-        max_line_length: { level: 'ignore' }
+        max_line_length: {level: 'ignore'}
       }
     },
 
@@ -60,7 +60,14 @@ module.exports = function(grunt) {
           scripts: {
             'grapp-websocket-rails': ['build/grapp-websocket-rails.js'],
             'grapp-websocket-rails-subscribe': ['build/grapp-websocket-rails-subscribe.js'],
-            'websocket-rails': ['build/websocket_rails/*.js']
+            'websocket-rails': [
+              'build/websocket_rails/websocket_rails.js',
+              'build/websocket_rails/event.js',
+              'build/websocket_rails/abstract_connection.js',
+              'build/websocket_rails/http_connection.js',
+              'build/websocket_rails/websocket_connection.js',
+              'build/websocket_rails/channel.js'
+            ]
           },
           styles: {
             dist: ['build/*.css']
@@ -115,17 +122,16 @@ module.exports = function(grunt) {
         updateConfigs: ['pkg'],
         commit: true,
         commitFiles: ['-a'],
-        commitMessage:'Bump version number to %VERSION%',
+        commitMessage: 'Bump version number to %VERSION%',
         createTag: true,
         tagName: '%VERSION%',
-        tagMessage:'Version %VERSION%',
+        tagMessage: 'Version %VERSION%',
         push: false
       }
     },
 
     changelog: {
-      options: {
-      }
+      options: {}
     },
 
     'wct-test': {
@@ -158,7 +164,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('web-component-tester');
 
   grunt.registerTask('build', 'Compile all assets and create the distribution files',
-    ['less', 'coffeelint', 'coffee', 'htmlbuild', 'replace']);
+      ['less', 'coffeelint', 'coffee', 'htmlbuild', 'replace']);
 
   grunt.registerTask('test', 'Test the web application', ['shell:test']);
 
@@ -171,6 +177,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', 'Build the software, start a web server and watch for changes',
-    ['build', 'connect', 'watch']
+      ['build', 'connect', 'watch']
   );
 };
